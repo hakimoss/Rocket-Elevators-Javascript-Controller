@@ -26,7 +26,7 @@ class Elevator {
         this.status = _status;
         this.direction;
         this.currentFloor = _currentFloor;
-        this.door = new Door(_id);
+        this.door = new Door(_id, _status);
         this.floorRequestButtonList = [];
         this.floorRequestList = [];
     }
@@ -49,7 +49,7 @@ class Door {
 class CallButton {
     constructor(_id, _status, _floor, _direction){
         this.ID = _id;
-        this.statuse = _status
+        this.status = _status
         this.floor = _floor
         this.direction = _direction
     }
@@ -64,16 +64,19 @@ class FloorRequestButton {
 
 //////////////// scénario 1 ////////////////////
 
-
+let column1 = new Column(1, 'idle', 10, 2)
 let elevatorA = new Elevator(1, 'idle', 10, 2)
 let elevatorB = new Elevator(2, 'idle', 10, 6)
-let doorA = new Door(1, 'closed')
-let doorB = new Door(2, 'closed')
+elevatorA.door.status = 'closed'
+elevatorB.door.status = 'closed'
 
-console.log(elevatorA)
-console.log(elevatorB)
-console.log(doorA)
-console.log(doorB)
+column1.elevatorsList = [{elevatorA}, {elevatorB}]
+
+console.log(column1)
+console.log(column1.elevatorsList)
+console.log(column1.elevatorsList[0].elevatorA.door)
+console.log(column1.elevatorsList[1].elevatorB.door)
+
 
 
 
