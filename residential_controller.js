@@ -2,54 +2,64 @@
 
 
 class Column {
-    constructor(_id, _status, _amountOfFloors, _amountOfElevators) {
+    constructor(_id, _amountOfFloors, _amountOfElevators) {
         this.ID = _id;
-        this.status = _status;
+        this.status = 'idle';
         this.elevatorsList = [];
         this.callButtonsList = [];
+        this.amountOfElevators = _amountOfElevators
 
         for (let i = 1; i <= _amountOfElevators; i++){
-            this.elevatorsList.push(new Elevator(i, _status, _amountOfFloors))
+            this.elevatorsList.push(new Elevator(i, 'idle', _amountOfFloors))
         }
         for (let i = 1; i <= (_amountOfFloors); i++){
-            this.callButtonsList.push(new CallButton(i, _status, i, 'up' ))
-            this.callButtonsList.push(new CallButton(i + 10, _status, i, 'down' ))
-        } 
-        
-        
+            this.callButtonsList.push(new CallButton(i, 'idle', i, 'up' ))
+            this.callButtonsList.push(new CallButton(i + 10, 'idle', i, 'down' ))
+        }   
     }
     requestElevator(_requestedFloor, _direction){
+        let score = 0;
         for (let i = 0; i < this.elevatorsList.length; i++){
-            
-            let score =  this.elevatorsList[i].currentFloor - _requestedFloor
-            
-            if (_direction === this.elevatorsList[i].direction){
-                score = +2
+            var x = i
+            if (this.elevatorsList[i].currentFloor > _requestedFloor){
+                score =  this.elevatorsList[i].currentFloor - _requestedFloor
+                } else {
+                    score =  _requestedFloor - this.elevatorsList[i].currentFloor
+                } 
+                if (_direction === this.elevatorsList[i].direction){
+                    score = +2
+                }
+                this.elevatorsList[i].score += score
+               /*  console.log(this.elevatorsList[i])   */
             }
+            var amountOfElevators = this.amountOfElevators 
+           
+            let scoreFinal = this.elevatorsList.reduce((accumulator, current) => accumulator + current.score, 0);
+            var selectedElevatorList =  this.elevatorsList.filter(function(selectedElevator) {
+                return selectedElevator.score <= (scoreFinal / amountOfElevators)
+            });
+             
+            console.log(selectedElevatorList[0])
 
+            if (selectedElevatorList[0].currentFloor < _requestedFloor) {
+                
+                for (let i = (selectedElevatorList[0].currentFloor); i < _requestedFloor; i++){
+
+                    selectedElevatorList[0].currentFloor = selectedElevatorList[0].currentFloor + 1
+                    console.log('Floor : ' + selectedElevatorList[0].currentFloor )
+   
+                }
+            } else {
+                for (let i = (selectedElevatorList[0].currentFloor); i > _requestedFloor; i--){
+
+                    selectedElevatorList[0].currentFloor = selectedElevatorList[0].currentFloor - 1
+                    console.log('Floor : ' + selectedElevatorList[0].currentFloor )
+   
+                }
+            }
             
-            console.log(score)
- 
-        }
-        
-
-        
-/*         for (let i = 0; i < this.elevatorsList.length; i++){
-            console.log(_requestedFloor)
-            if (_requestedFloor <= 5 && this.elevatorsList[0].status === 'idle'){
-                console.log(this.elevatorsList[0])
-                this.elevatorsList[0].currentFloor = _requestedFloor
-                this.elevatorsList[0].status = 'moving'
-                console.log(this.elevatorsList[0])
-                break;
-            } else if (_requestedFloor > 5 && this.elevatorsList[1].status === 'idle') {
-                console.log(this.elevatorsList[1])
-                this.elevatorsList[1].currentFloor = _requestedFloor
-                this.elevatorsList[1].status = 'moving'
-                console.log(this.elevatorsList[1])
-                break;
-            } 
-        }     */
+            console.log(selectedElevatorList[0])
+         
 /*      -Trouver un ascenseur disponible
         -Faire bouger cet ascenseur jusqu’à l’utilisateur
         -Gérer les portes
@@ -58,15 +68,15 @@ class Column {
 }
 
 class Elevator {
-    constructor(_id, _status, _amountOfFloors, _currentFloor){
+    constructor(_id, _amountOfFloors, _currentFloor){
         this.ID = _id;
-        this.status = _status;
+        this.status = 'idle';
         this.direction;
         this.currentFloor = _currentFloor;
-        this.door = new Door(_id, _status);
+        this.door = new Door(_id);
         this.floorRequestButtonList = [];
         this.floorRequestList = [];
-        this.score;
+        this.score = 0;
 
     }
     
@@ -79,40 +89,41 @@ class Elevator {
 }
 
 class Door {
-    constructor(_id, _status) {
+    constructor(_id) {
         this.ID = _id;
-        this.status = _status;
+        this.status = 'closed';
     }
 }
 
 class CallButton {
-    constructor(_id, _status, _floor, _direction){
+    constructor(_id, _floor, _direction){
         this.ID = _id;
-        this.status = _status
+        this.status = 'idle'
         this.floor = _floor
         this.direction = _direction
     }
 }
 class FloorRequestButton {
-    constructor(_id, _status, _floor) {
+    constructor(_id, _floor) {
         this.ID = _id
-        this.status = _status
+        this.status = 'idle'
         this.floor = _floor
     }
 }
 
 //////////////// scénario 1 ////////////////////
 
-let column1 = new Column(1, 'idle', 10, 2)
+let column1 = new Column(1, 10, 2)
 column1.elevatorsList[0].currentFloor = 2
 column1.elevatorsList[1].currentFloor = 6
-column1.elevatorsList[0].direction = 'down'
-column1.elevatorsList[1].direction = 'up'
+
+/* column1.elevatorsList[0].direction = 'down'
+column1.elevatorsList[1].direction = 'up' */
 
 
 
 
-column1.requestElevator(3, 'up')
+column1.requestElevator(5, 'up')
 //console.log(column1.callButtonsList)
 //console.log(column1.elevatorsList[0].door)
 
