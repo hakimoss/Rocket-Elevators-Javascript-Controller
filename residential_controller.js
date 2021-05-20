@@ -139,6 +139,8 @@ class Elevator {
     }
     
     requestFloor(_requestedFloor) {
+
+        var initialFloor =  this.currentFloor
         
         //////////////  CRÉATION DES REQUETTE D'ÉTAGE  ////////////////
         
@@ -187,8 +189,8 @@ class Elevator {
                 console.log('Direction : ' + column1.elevatorInAction.direction )
                 console.log('Floor : ' + column1.elevatorInAction.currentFloor )
    
-                }
             }
+        }
 //***//
         //////////////  OUVERTURE DE PORTE A PARTIR DE L'INTERIEUR ////////////////
 
@@ -200,7 +202,56 @@ class Elevator {
         console.log('////////// etas elevator //////////////')
         console.log(column1.elevatorInAction)
 
+        //////////////  RETOUR A SON EMPLACEMENT INITIAL ////////////////
         
+        column1.elevatorInAction.door = 'closed'
+        console.log('The door is ' + column1.elevatorInAction.door)
+        column1.elevatorInAction.status = 'moving'
+
+
+        
+
+        
+        
+
+         if (column1.elevatorInAction.currentFloor < initialFloor) {
+
+            column1.elevatorInAction.direction = 'up'
+
+            for (let i = (column1.elevatorInAction.currentFloor); i < initialFloor; i++){
+
+                column1.elevatorInAction.currentFloor = column1.elevatorInAction.currentFloor + 1
+                ////compte les floor parcourue
+                console.log('Status : ' + column1.elevatorInAction.status )
+                console.log('Direction : ' + column1.elevatorInAction.direction )
+            //  console.log('score : ' + column1.elevatorInAction.score) 
+                console.log('Floor : ' + column1.elevatorInAction.currentFloor )
+   
+            }
+        } else {
+
+            column1.elevatorInAction.direction = 'down'
+
+            for (let i = (column1.elevatorInAction.currentFloor); i > initialFloor; i--){
+
+                column1.elevatorInAction.currentFloor = column1.elevatorInAction.currentFloor - 1
+                ///compte les floor parcourue
+                console.log('Status : ' + column1.elevatorInAction.status )
+            //  console.log('score : ' + column1.elevatorInAction.score) 
+                console.log('Direction : ' + column1.elevatorInAction.direction )
+                console.log('Floor : ' + column1.elevatorInAction.currentFloor )
+   
+            }
+        } 
+
+        //////////////////  IDLE AUX POINT D'ORIGINE /////////////////////
+        column1.elevatorInAction.direction = 'idle'
+        column1.elevatorInAction.status = 'idle'
+        column1.elevatorInAction.door = 'open'
+        console.log('The door is ' + column1.elevatorInAction.door)
+
+
+        console.log(column1.elevatorInAction)
 
 /*      -Déplacer l’ascenseur jusqu’à l’étage demandé par l’utilisateur
         -Gérer les portes */
