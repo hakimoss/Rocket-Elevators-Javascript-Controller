@@ -26,12 +26,16 @@ class Column {
     }
 
 /////////////////////////  FONCION D'APPELLE  ////////////////////////////////
-   
+    
+
+
     requestElevator(_requestedFloor, _direction){
+
         let score = 0;
         console.log('//////// étas DES elevator /////////')
         for (let i = 0; i < this.elevatorsList.length; i++){
 
+            this.elevatorsList[i].currentFloor = this.elevatorsList[i].idle
             ///////////////  CRÉATION DU SCORE  ////////////
             
             if (this.elevatorsList[i].currentFloor > _requestedFloor){
@@ -68,11 +72,11 @@ class Column {
             selectedElevatorList[0].status = 'moving'
 
 
-            if (selectedElevatorList[0].currentFloor < _requestedFloor) {
+            if (selectedElevatorList[0].currentFloor < selectedElevatorList[0].idle) {
 
                 selectedElevatorList[0].direction = 'up'
 
-                for (let i = (selectedElevatorList[0].currentFloor); i < _requestedFloor; i++){
+                for (let i = (selectedElevatorList[0].currentFloor); i < selectedElevatorList[0].idle; i++){
 
                     selectedElevatorList[0].currentFloor = selectedElevatorList[0].currentFloor + 1
                     ////compte les floor parcourue
@@ -86,7 +90,7 @@ class Column {
 
                 selectedElevatorList[0].direction = 'down'
 
-                for (let i = (selectedElevatorList[0].currentFloor); i > _requestedFloor; i--){
+                for (let i = (selectedElevatorList[0].currentFloor); i > selectedElevatorList[0].idle; i--){
 
                     selectedElevatorList[0].currentFloor = selectedElevatorList[0].currentFloor - 1
                     ///compte les floor parcourue
@@ -120,16 +124,17 @@ class Column {
 /*      -Trouver un ascenseur disponible(x)
         -Faire bouger cet ascenseur jusqu’à l’utilisateur(x)
         -Gérer les portes(x)
-        -Retourner l’ascenseur à la fin de la fonction, pour être utilisé par la méthode request */
+        -Retourner l’ascenseur à la fin de la fonction, pour être utilisé par la méthode request(x) */
     }
 }
 
 class Elevator {
-    constructor(_id, _amountOfFloors, _currentFloor){
+    constructor(_id, _amountOfFloors, _currentFloor, _idle){
         this.ID = _id;
         this.status = 'idle';
         this.direction = 'idle'
         this.currentFloor = _currentFloor;
+        this.idle = _idle
         this.door = new Door(_id);
         this.floorRequestButtonList = [];
         this.floorRequestList = [];
@@ -139,8 +144,8 @@ class Elevator {
     }
     
     requestFloor(_requestedFloor) {
-
         var initialFloor =  this.currentFloor
+        console.log('ici   ' + initialFloor)
         
         //////////////  CRÉATION DES REQUETTE D'ÉTAGE  ////////////////
         
@@ -248,13 +253,15 @@ class Elevator {
         column1.elevatorInAction.direction = 'idle'
         column1.elevatorInAction.status = 'idle'
         column1.elevatorInAction.door = 'open'
+        column1.elevatorInAction.floorRequestList = []
+
         console.log('The door is ' + column1.elevatorInAction.door)
 
 
         console.log(column1.elevatorInAction)
-
-/*      -Déplacer l’ascenseur jusqu’à l’étage demandé par l’utilisateur
-        -Gérer les portes */
+   
+/*      -Déplacer l’ascenseur jusqu’à l’étage demandé par l’utilisateur (x)
+        -Gérer les portes (x) */
     }
     
 }
@@ -285,16 +292,16 @@ class FloorRequestButton {
 //////////////// scénario 1 ////////////////////
 
 let column1 = new Column(1, 10, 2)
-column1.elevatorsList[0].currentFloor = 2
-column1.elevatorsList[1].currentFloor = 6
+column1.elevatorsList[0].idle = 2
+column1.elevatorsList[1].idle = 6
 /* column1.elevatorsList[2].currentFloor = 8 */
 
 
 
 
-column1.requestElevator(5, 'up') 
+column1.requestElevator(1, 'up') 
 console.log("////// mouvement a partire de l'elevator///////")
- column1.elevatorsList[0].requestFloor(8)  
+column1.elevatorsList[0].requestFloor(5)   
 /* console.log(column1.elevatorInAction) */
 /* column1.elevatorsList[0].requestFloor(2)   */
 
