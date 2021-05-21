@@ -21,7 +21,7 @@ class Column {
 
         for (let i = 1; i <= (_amountOfFloors); i++){
             this.callButtonsList.push(new CallButton(i, 'idle', i, 'up' ))
-            this.callButtonsList.push(new CallButton(i + 10, 'idle', i, 'down' ))
+            this.callButtonsList.push(new CallButton(i + _amountOfFloors, 'idle', i, 'down' ))
         }   
     }
 
@@ -40,16 +40,16 @@ class Column {
             
             if (this.elevatorsList[i].currentFloor > _requestedFloor){
                 score =  this.elevatorsList[i].currentFloor - _requestedFloor
-                } else {
-                    score =  _requestedFloor - this.elevatorsList[i].currentFloor
-                } 
-                if (_direction === this.elevatorsList[i].direction){
+            } else {
+                score =  _requestedFloor - this.elevatorsList[i].currentFloor
+            } 
+            if (_direction == this.elevatorsList[i].direction){
                     score +=  2
-                }
+            }
                 this.elevatorsList[i].score += score
 
               
-            }
+        }
             var amountOfElevators = this.amountOfElevators 
 
             /////////////  REGLE ET SELECTION  /////////////
@@ -60,14 +60,8 @@ class Column {
                 return selectedElevator.score <= (scoreFinal / amountOfElevators)
             });
 
-            ////state avans mouvement 
-            
-
-            
             //////////////  MOUVEMENT DE L'ASCENCEUR  ////////////////
           
-
-
             if (selectedElevatorList[0].currentFloor < _requestedFloor) {
                 selectedElevatorList[0].status = 'moving'
                 selectedElevatorList[0].direction = 'up'
@@ -76,7 +70,6 @@ class Column {
                 for (let i = (selectedElevatorList[0].currentFloor); i < _requestedFloor; i++){
 
                     selectedElevatorList[0].currentFloor = selectedElevatorList[0].currentFloor + 1
-                    ////compte les floor parcourue
          /*         console.log('score : ' + selectedElevatorList[0].score) */
                     console.log('Floor : ' + selectedElevatorList[0].currentFloor )
    
@@ -89,7 +82,6 @@ class Column {
                 for (let i = (selectedElevatorList[0].currentFloor); i > _requestedFloor; i--){
 
                     selectedElevatorList[0].currentFloor = selectedElevatorList[0].currentFloor - 1
-                    ///compte les floor parcourue
            /*       console.log('score : ' + selectedElevatorList[0].score) */
                     console.log('Floor : ' + selectedElevatorList[0].currentFloor )
    
@@ -102,23 +94,12 @@ class Column {
             selectedElevatorList[0].direction = 'idle'
             selectedElevatorList[0].status = 'on idle'
             selectedElevatorList[0].door = 'open'
- 
-            ////state des portes     
+   
             console.log("Elevator " + selectedElevatorList[0].ID + " is " + selectedElevatorList[0].status)       
             console.log('The door is ' + selectedElevatorList[0].door)
 
-            ////state apres mouvement
-
-
             this.elevatorInAction = selectedElevatorList[0]
-           
-            
 
-         
-/*      -Trouver un ascenseur disponible(x)
-        -Faire bouger cet ascenseur jusqu’à l’utilisateur(x)
-        -Gérer les portes(x)
-        -Retourner l’ascenseur à la fin de la fonction, pour être utilisé par la méthode request(x) */
     }
 }
 
@@ -133,14 +114,10 @@ class Elevator {
         this.floorRequestButtonList = [];
         this.floorRequestList = [];
         this.score = 0;
-       
-
     }
     
     requestFloor(_requestedFloor) {
-      
 
-        
         //////////////  CRÉATION DES REQUETTE D'ÉTAGE  ////////////////
         
         for (let i = 1; i <= this.floorRequestList.length + 1; i++){
@@ -148,10 +125,9 @@ class Elevator {
         } 
         this.floorRequestList.push(new FloorRequestButton(idFloorRequest, _requestedFloor))
 
-
         console.log("Floor " + this.floorRequestList[0].floor + " is selected")
         
-        //////////////  OUVERTURE DE PORTE A PARTIR DE L'INTERIEUR ////////////////
+        //////////////  FERMETURE DE PORTE A PARTIR DE L'INTERIEUR ////////////////
 //***//
         column1.elevatorInAction.door = 'closed'
         console.log('The door is ' + column1.elevatorInAction.door)
@@ -169,19 +145,14 @@ class Elevator {
             for (let i = (column1.elevatorInAction.currentFloor); i < _requestedFloor; i++){
 
                 column1.elevatorInAction.currentFloor = column1.elevatorInAction.currentFloor + 1
-                ////compte les floor parcourue
      /*         console.log('score : ' + column1.elevatorInAction.score) */
                 console.log('Floor : ' + column1.elevatorInAction.currentFloor )
-   
             }
         } else {
-
             column1.elevatorInAction.direction = 'down'
 
             for (let i = (column1.elevatorInAction.currentFloor); i > _requestedFloor; i--){
-
                 column1.elevatorInAction.currentFloor = column1.elevatorInAction.currentFloor - 1
-                ///compte les floor parcourue
             /*  console.log('score : ' + column1.elevatorInAction.score) */
                 console.log('Floor : ' + column1.elevatorInAction.currentFloor )
    
@@ -204,12 +175,6 @@ class Elevator {
         console.log('The door is ' + column1.elevatorInAction.door)
         column1.elevatorInAction.status = 'moving'
 
-
-        
-
-        
-        
-
          if (column1.elevatorInAction.currentFloor < column1.elevatorInAction.idle) {
 
             column1.elevatorInAction.direction = 'up'
@@ -220,7 +185,6 @@ class Elevator {
                 column1.elevatorInAction.currentFloor = column1.elevatorInAction.currentFloor + 1
                 ////compte les floor parcourue
                 console.log('Floor : ' + column1.elevatorInAction.currentFloor )
-   
             }
         } else {
 
@@ -243,12 +207,8 @@ class Elevator {
         column1.elevatorInAction.floorRequestList = []
 
         console.log("Elevator " + column1.elevatorInAction.ID + " is " + column1.elevatorInAction.status)
-
         console.log('The door is ' + column1.elevatorInAction.door)
 
-   
-/*      -Déplacer l’ascenseur jusqu’à l’étage demandé par l’utilisateur (x)
-        -Gérer les portes (x) */
     }
     
 }
@@ -284,7 +244,6 @@ column1.elevatorsList[1].idle = 6
 /* column1.elevatorsList[2].currentFloor = 8 */
 
 
-column1.requestElevator(9, 'up') 
-column1.elevatorsList[0].requestFloor(2)   
-/* console.log(column1.elevatorInAction) */
-/* column1.elevatorsList[0].requestFloor(2)   */
+column1.requestElevator(9, 'down') 
+column1.elevatorsList[0].requestFloor(1)   
+
