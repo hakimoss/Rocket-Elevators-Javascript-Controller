@@ -245,5 +245,5 @@ column1.elevatorsList[1].idle = 6
 
 
 column1.requestElevator(9, 'down') 
-column1.elevatorsList[0].requestFloor(1)   
+column1.elevatorsList[0].requestFloor(2)   
 
